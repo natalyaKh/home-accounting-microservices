@@ -1,6 +1,7 @@
 package usersservice.dto;
 
 import lombok.*;
+import usersservice.models.entity.UserEntity;
 
 import java.io.Serializable;
 import java.util.List;

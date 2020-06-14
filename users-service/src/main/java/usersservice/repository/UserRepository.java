@@ -7,8 +7,8 @@ import usersservice.models.entity.UserEntity;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
 	UserEntity findByEmail(String email);
+    UserEntity findByUserId(String userId);
 
-//	UserEntity findByUserId(String userId);
 //	UserEntity findUserByEmailVerificationToken(String token);
 //
 //	@Query(value="select * from Users u where u.EMAIL_VERIFICATION_STATUS = 'true'",

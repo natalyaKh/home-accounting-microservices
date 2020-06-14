@@ -3,6 +3,12 @@ package usersservice.service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import usersservice.dto.UserDto;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
     UserDto getUser(String userName);
+    UserDto getUserByUserId(String id);
+//    UserDto updateUser(String id, UserDto userDto);
+//    void deleteUser(String id);
+    List<UserDto> getUsers(int page, int limit);
 }

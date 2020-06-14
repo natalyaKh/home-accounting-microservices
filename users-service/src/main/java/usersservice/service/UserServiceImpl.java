@@ -3,6 +3,9 @@ package usersservice.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +22,8 @@ import org.springframework.security.core.userdetails.User;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -68,4 +73,35 @@ public class UserServiceImpl implements UserService {
 
         return returnValue;
     }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity == null)
+            throw new UsernameNotFoundException("User with ID: " + userId + " not found");
+        returnValue = modelMapper.map(userEntity, UserDto.class);
+        return returnValue;
+    }
+
+
+    @Override
+    public List<UserDto> getUsers(int page, int limit) {
+        if(page>0) page = page-1;
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<UserEntity> usersPage = userRepository.findAll(pageableRequest);
+        List<UserEntity> users = usersPage.getContent();
+
+        List<UserDto> returnValue = new ArrayList<>();
+        users.stream().map(user -> toDto(user)).forEachOrdered(returnValue::add);
+
+        return returnValue;
+    }
+
+    private UserDto toDto(UserEntity userEntitty) {
+        UserDto userDto = modelMapper.map(userEntitty, UserDto.class);
+        return userDto;
+    }
+
+
 }
