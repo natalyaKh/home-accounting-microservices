@@ -30,8 +30,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                  * фильтр для всех обьектов, которые проходят через процедуру аутентификации
                  */
                 .addFilter(getAuthenticationFilter())
-//                .addFilter(new AuthenticationFilter(authenticationManager()))
-        ;
+                /**
+                 * только тот, кто вошел в пприложение, может менять что то в нем
+                 */
+                .addFilter(new AuthorizationFilter(authenticationManager()));
 
     }
 
@@ -51,5 +53,4 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/users/login");
         return filter;
     }
-
 }
