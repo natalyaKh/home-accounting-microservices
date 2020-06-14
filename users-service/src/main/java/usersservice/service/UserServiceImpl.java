@@ -2,18 +2,26 @@ package usersservice.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import usersservice.enums.ErrorMessages;
 import usersservice.utils.Utils;
 import usersservice.dto.UserDto;
-import usersservice.exceptions.ErrorMessages;
 import usersservice.exceptions.UserServiceException;
 import usersservice.models.entity.UserEntity;
 import usersservice.repository.UserRepository;
+import org.springframework.security.core.userdetails.User;
+
+
+
+
+import java.util.ArrayList;
 
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -24,7 +32,7 @@ public class UserServiceImpl {
 
     public UserDto createUser(UserDto user) {
 
-        if ( userRepository.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new UserServiceException(ErrorMessages.USER_ALREADY_EXISTS.name());
         }
         ModelMapper modelMapper = new ModelMapper();
@@ -40,4 +48,14 @@ public class UserServiceImpl {
         return returnValue;
     }
 
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null)
+            throw new UsernameNotFoundException(email);
+
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+    }
 }

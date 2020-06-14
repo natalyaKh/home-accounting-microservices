@@ -1,4 +1,4 @@
-package usersservice.exceptions;
+package usersservice.enums;
 
 public enum ErrorMessages {
 
