@@ -25,7 +25,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
                 .permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated().and()
+                /**
+                 * фильтр для всех обьектов, которые проходят через процедуру аутентификации
+                 */
+                .addFilter(new AuthenticationFilter(authenticationManager()))
+        ;
 
     }
 
@@ -33,4 +38,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
+
+
 }
