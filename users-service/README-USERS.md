@@ -6,4 +6,6 @@ SignUp (without authentication)
 
 SignIn (getting JWT Token): using e-mail and password
 
++CRUD
+
 !!! Token contains UserID !!!
