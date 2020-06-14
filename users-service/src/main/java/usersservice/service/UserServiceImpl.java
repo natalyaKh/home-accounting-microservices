@@ -1,6 +1,7 @@
 package usersservice.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+    ModelMapper modelMapper = new ModelMapper();
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -35,7 +36,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new UserServiceException(ErrorMessages.USER_ALREADY_EXISTS.name());
         }
-        ModelMapper modelMapper = new ModelMapper();
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
         String publicUserId = utils.generateUserId(30);
@@ -54,5 +54,18 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null)
             throw new UsernameNotFoundException(email);
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+    }
+
+    @Override
+    public UserDto getUser(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null)
+            throw new UserServiceException(ErrorMessages.AUTHENTICATION_FAILED + email);
+
+
+        UserDto returnValue = modelMapper.map(userEntity, UserDto.class);
+
+        return returnValue;
     }
 }

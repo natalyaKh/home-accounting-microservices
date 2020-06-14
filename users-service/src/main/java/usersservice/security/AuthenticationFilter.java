@@ -8,10 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import usersservice.SpringApplicationContext;
+import usersservice.constants.BeansConstants;
 import usersservice.constants.SecurityConstants;
 import usersservice.dto.UserDto;
 import usersservice.models.request.UserLoginRequestModel;
 import usersservice.service.UserService;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,11 +23,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.core.userdetails.User;
 
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private String contentType;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -36,6 +41,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
      * Если пароль из JSON соответсвуте паролю пользовател в БД - запускается метод
      * successfulAuthentication
      * если нет - RuntimeException
+     *
      * @param request
      * @param response
      * @return
@@ -62,6 +68,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * тут собираем токен^ который в последствии будем передавать в заголовке в остальные методы
+     *
      * @throws IOException
      * @throws ServletException
      */
@@ -76,10 +83,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String token = Jwts.builder()
                 .setSubject(userName)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
                 .compact();
-        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+        UserDto userDto = userService.getUser(userName);
 
+        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        res.addHeader("UserID", userDto.getUserId());
 
     }
 }
