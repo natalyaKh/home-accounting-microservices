@@ -29,7 +29,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /**
                  * фильтр для всех обьектов, которые проходят через процедуру аутентификации
                  */
-                .addFilter(new AuthenticationFilter(authenticationManager()))
+                .addFilter(getAuthenticationFilter())
+//                .addFilter(new AuthenticationFilter(authenticationManager()))
         ;
 
     }
@@ -39,5 +40,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
+    /**
+     * логин пользователя теперь по ссылке .../users/login
+     *
+     * @return
+     * @throws Exception
+     */
+    protected AuthenticationFilter getAuthenticationFilter() throws Exception {
+        final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+        filter.setFilterProcessesUrl("/users/login");
+        return filter;
+    }
 
 }
