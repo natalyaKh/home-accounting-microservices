@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import usersservice.enums.ErrorMessages;
+import usersservice.hystrix.SendMail;
 import usersservice.utils.Utils;
 import usersservice.dto.UserDto;
 import usersservice.exceptions.UserServiceException;
@@ -32,6 +33,8 @@ public class UserServiceImpl implements UserService {
     Utils utils;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    SendMail sendMail;
 
     public UserDto createUser(UserDto user) {
 
@@ -45,9 +48,9 @@ public class UserServiceImpl implements UserService {
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
 
-
         UserEntity storedUserDetails = userRepository.save(userEntity);
         UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
+        sendMail.verifyEmail(returnValue);
         return returnValue;
     }
 
@@ -71,9 +74,7 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null)
             throw new UserServiceException(ErrorMessages.AUTHENTICATION_FAILED + email);
 
-
         UserDto returnValue = modelMapper.map(userEntity, UserDto.class);
-
         return returnValue;
     }
 
