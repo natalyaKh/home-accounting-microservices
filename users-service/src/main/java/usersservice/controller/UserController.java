@@ -9,6 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import usersservice.dto.UserDto;
 import usersservice.enums.RequestOperationName;
+import usersservice.models.request.PasswordResetModel;
+import usersservice.models.request.PasswordResetRequestModel;
 import usersservice.models.request.UserDetailsRequestModel;
 import usersservice.models.responce.OperationStatusModel;
 import usersservice.enums.RequestOperationStatus;
@@ -85,7 +87,7 @@ public class UserController {
         return returnValue;
     }
 
-    /*
+    /**
      * http://localhost:8082/users/email-verification?token=sdfsdf
      * */
     @GetMapping(path = "/email-verification")
@@ -93,13 +95,52 @@ public class UserController {
         OperationStatusModel returnValue = new OperationStatusModel();
         returnValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name());
         boolean isVerified = userService.verifyEmailToken(token);
-        if(isVerified)
-        {
+        if (isVerified) {
             returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
         } else {
             returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
         }
         return returnValue;
     }
+
+    /**
+     * step-2 for change password
+     * http://localhost:8082/users/password-reset-request
+     */
+    @PostMapping(path = "/password-reset-request")
+    public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+
+        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+        if (operationResult) {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        }
+
+        return returnValue;
+    }
+
+    /**    step-2 for change password */
+    @PostMapping(path = "/password-reset")
+    public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult = userService.resetPassword(
+                passwordResetModel.getToken(),
+                passwordResetModel.getPassword());
+
+        returnValue.setOperationName(RequestOperationName.PASSWORD_RESET.name());
+        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+        if (operationResult) {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        }
+
+        return returnValue;
+    }
+
 
 }

@@ -28,6 +28,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /**проверка e-mail - разрешена всем**/
                 .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL)
                 .permitAll()
+                /**изменение пароля - доступно всем**/
+                .antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL)
+                .permitAll()
+                /**вход по ссылке для изменения пароля из письма доступен всем*/
+                .antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL)
+                .permitAll()
                 .anyRequest().authenticated().and()
                 /**
                  * фильтр для всех обьектов, которые проходят через процедуру аутентификации
