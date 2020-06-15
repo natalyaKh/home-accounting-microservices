@@ -20,8 +20,6 @@ public class EmailController {
     @Autowired
     Environment env;
 
-
-
     @PostMapping("/verification-email")
     String sendSimpleEmail(@RequestBody EmailDto mail) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
@@ -30,7 +28,7 @@ public class EmailController {
         String lastName = mail.getUserLastName();
         String firstName = mail.getUserName();
 
-        String VERITIFY_LINK = env.getProperty("verification.link");
+        String VERIFY_LINK = env.getProperty("verification.link");
 
         boolean multipart = true;
 
@@ -40,7 +38,7 @@ public class EmailController {
                 "<h1> Hi " + firstName + " " + lastName + ". Please verify your email address</h1>"
                         + "<p>Thank you for registering with our app. To complete registration process and be able to log in,"
                         + " click on the following link: "
-                        + " <a href='"+VERITIFY_LINK + "?token=" + tokenValue+"'>" + "<br/><br/>" +" Final step to complete your registration" +
+                        + " <a href='"+VERIFY_LINK + "?token=" + tokenValue+"'>" + "<br/><br/>" +" Final step to complete your registration" +
                         "</a><br/><br/>"
                         + "Thank you! And we are waiting for you inside!";
 
