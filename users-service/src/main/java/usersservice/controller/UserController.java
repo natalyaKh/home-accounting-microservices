@@ -4,15 +4,16 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import usersservice.dto.UserDto;
+import usersservice.enums.RequestOperationName;
 import usersservice.models.request.UserDetailsRequestModel;
+import usersservice.models.responce.OperationStatusModel;
+import usersservice.enums.RequestOperationStatus;
 import usersservice.models.responce.UserRest;
 import usersservice.service.UserServiceImpl;
 
-import javax.validation.Valid;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,26 +51,26 @@ public class UserController {
         return returnValue;
     }
 
-//    @PutMapping(path = "/{id}")
-//    public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
-//        UserRest returnValue = new UserRest();
-//        UserDto userDto = new UserDto();
-//        userDto = new ModelMapper().map(userDetails, UserDto.class);
-//        UserDto updateUser = userService.updateUser(id, userDto);
-//        returnValue = new ModelMapper().map(updateUser, UserRest.class);
-//        return returnValue;
-//    }
+    @PutMapping(path = "/{id}")
+    public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
+        UserRest returnValue = new UserRest();
+        UserDto userDto = new UserDto();
+        userDto = new ModelMapper().map(userDetails, UserDto.class);
+        UserDto updateUser = userService.updateUser(id, userDto);
+        returnValue = new ModelMapper().map(updateUser, UserRest.class);
+        return returnValue;
+    }
 
-//    @DeleteMapping(path = "/{id}")
-//    public OperationStatusModel deleteUser(@PathVariable String id) {
-//        OperationStatusModel returnValue = new OperationStatusModel();
-//        returnValue.setOperationName(RequestOperationName.DELETE.name());
-//
-//        userService.deleteUser(id);
-//
-//        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
-//        return returnValue;
-//    }
+    @DeleteMapping(path = "/{id}")
+    public OperationStatusModel deleteUser(@PathVariable String id) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+        userService.deleteUser(id);
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return returnValue;
+    }
 
 
     @GetMapping()
