@@ -25,6 +25,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
                 .permitAll()
+                /**проверка e-mail - разрешена всем**/
+                .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL)
+                .permitAll()
                 .anyRequest().authenticated().and()
                 /**
                  * фильтр для всех обьектов, которые проходят через процедуру аутентификации

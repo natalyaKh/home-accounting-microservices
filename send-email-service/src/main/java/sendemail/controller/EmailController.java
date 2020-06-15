@@ -22,7 +22,7 @@ public class EmailController {
 
 
 
-    @PostMapping()
+    @PostMapping("/verification-email")
     String sendSimpleEmail(@RequestBody EmailDto mail) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         String email = mail.getEmail();
