@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import usersservice.dto.UserDto;
@@ -81,7 +82,24 @@ public class UserController {
         Type listType = new TypeToken<List<UserRest>>() {
         }.getType();
         returnValue = new ModelMapper().map(users, listType);
-
         return returnValue;
     }
+
+    /*
+     * http://localhost:8082/users/email-verification?token=sdfsdf
+     * */
+    @GetMapping(path = "/email-verification")
+    public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+        returnValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name());
+        boolean isVerified = userService.verifyEmailToken(token);
+        if(isVerified)
+        {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        } else {
+            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+        }
+        return returnValue;
+    }
+
 }

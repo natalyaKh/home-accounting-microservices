@@ -8,10 +8,8 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     UserDto getUser(String userName);
     UserDto getUserByUserId(String id);
-//    UserDto updateUser(String id, UserDto userDto);
-//    void deleteUser(String id);
     List<UserDto> getUsers(int page, int limit);
-
     UserDto updateUser(String id, UserDto userDto);
     void deleteUser(String id);
+    boolean verifyEmailToken(String token);
 }
