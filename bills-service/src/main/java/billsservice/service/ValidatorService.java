@@ -171,31 +171,32 @@ public class ValidatorService {
     }
 
     /**
-     * Bill validate
+     * Bill category
      */
     public void checkElementsForCategory(OperationDto operationDto) throws Exception {
         Optional<Bill> bill = billRepository.findByUserUuidAndBillUuidAndDeleted(operationDto.getUserUuid(),
                 operationDto.getBillUuid(), false);
         if (!bill.isPresent()) {
-            //            TODO implementation
-//            LOGGER.info("Bill not exists ", mapper.writeValueAsString(bill));
-//            throw new HomeBuhNotFoundException("bill", operationDto.getBillUuid());
+            LOGGER.info("Bill not exists ", mapper.writeValueAsString(bill));
+            throw new BillServiceException(ErrorMessages.BILL_ALREADY_EXISTS.getErrorMessage() + " "
+                    + bill.get().getBillName());
         }
         Optional<Category> category = categoryRepository.findByUserUuidAndCategoryUuidAndDeletedAndType(operationDto.getUserUuid(),
                 operationDto.getCategoryUuid(), false, operationDto.getType());
         if (!category.isPresent()) {
-            //            TODO implementation
-//            LOGGER.info("Category not exists ", mapper.writeValueAsString(category));
-//            throw new HomeBuhNotFoundException("category", operationDto.getBillUuid());
+            LOGGER.info("Category not exists ", mapper.writeValueAsString(category));
+            throw new BillServiceException(ErrorMessages.CATEGORY_ALREADY_EXISTS.getErrorMessage() + " "
+                    + category.get().getCategoryName());
         }
         if (operationDto.getSubcategoryUuid() != null) {
             Optional<Subcategory> subcategory = subCategoryRepository.findByUserUuidAndSubcategoryUuidAndCategoryUuidAndDeleted(
                     operationDto.getUserUuid(), operationDto.getSubcategoryUuid(), operationDto.getCategoryUuid(), false
             );
             if (!subcategory.isPresent()) {
-                //            TODO implementation
-//                LOGGER.info("Subcategory not exists ", mapper.writeValueAsString(subcategory));
-//                throw new HomeBuhNotFoundException("subcategory", operationDto.getBillUuid());
+
+                LOGGER.info("Subcategory not exists ", mapper.writeValueAsString(subcategory));
+                throw new BillServiceException(ErrorMessages.SUBCATEGORY_ALREADY_EXISTS.getErrorMessage() + " "
+           + subcategory.get().getSubcategoryName());
             }
         }
 //        List<CurrencyFromFeign> listOfCurrency = currencyServiceClient.getAllCurrencyByUser(
