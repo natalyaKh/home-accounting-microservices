@@ -63,7 +63,7 @@ public class BillController {
     }
 
     @PutMapping("/{userUuid}/{billUuid}")
-    public BillDto updateBill(@PathVariable String userUuid, @PathVariable String billUuid, @RequestBody
+    public BillDto updateBill(@PathVariable String userUuid, @PathVariable String billUuid, @Valid @RequestBody
     final UpdateBillDto billDto ) throws JsonProcessingException {
         validatorService.checkBill(userUuid, billUuid);
         return billService.updateBill(userUuid, billUuid, billDto);

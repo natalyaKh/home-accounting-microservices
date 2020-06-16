@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/category")
@@ -19,7 +21,7 @@ public class CategoryController {
 
     @PostMapping()
     public @ResponseBody
-    CategoryDto addCategory(@RequestBody final CategoryDto categoryDto) throws JsonProcessingException {
+    CategoryDto addCategory(@Valid  @RequestBody final CategoryDto categoryDto) throws JsonProcessingException {
         validatorService.checkUniqOfCategory(categoryDto.getUserUuid(),
                 categoryDto.getCategoryName(), categoryDto.getType());
         if(categoryDto.getDecryption().isEmpty()){

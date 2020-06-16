@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class OperationController {
     ValidatorService validatorService;
 
     @PostMapping()
-    public OperationDto addOperation(@RequestBody final OperationDto operationDto) throws Exception {
+    public OperationDto addOperation(@Valid @RequestBody final OperationDto operationDto) throws Exception {
         validatorService.checkElementsForCategory(operationDto);
         if(operationDto.getDescription() == null){
             operationDto.setDescription("");
@@ -50,7 +51,7 @@ public class OperationController {
     @PutMapping("/{operationUuid}/{userUuid}/{type}")
     public OperationDto updateOperation(@PathVariable String operationUuid, @PathVariable String userUuid,
                                         @PathVariable CategoryType type,
-                                        @RequestBody UpdateOperationDto updateOperationDto) throws JsonProcessingException {
+                                        @Valid @RequestBody UpdateOperationDto updateOperationDto) throws JsonProcessingException {
         validatorService.checkOperation(userUuid, operationUuid, type);
         return operationService.updateOperation(operationUuid, userUuid, type, updateOperationDto);
     }
