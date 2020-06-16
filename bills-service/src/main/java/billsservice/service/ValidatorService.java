@@ -2,6 +2,7 @@ package billsservice.service;
 
 
 import billsservice.dto.BillNumbersDto;
+import billsservice.dto.OperationDto;
 import billsservice.dto.SubCategoryDto;
 import billsservice.enums.CategoryType;
 import billsservice.enums.ErrorMessages;
@@ -10,6 +11,7 @@ import billsservice.exceptions.AppExceptionsHandler;
 import billsservice.exceptions.BillServiceException;
 import billsservice.model.Bill;
 import billsservice.model.Category;
+import billsservice.model.Operation;
 import billsservice.model.Subcategory;
 import billsservice.repo.BillRepository;
 import billsservice.repo.CategoryRepository;
@@ -168,63 +170,38 @@ public class ValidatorService {
         }
     }
 
-
-
-
-
-//    public List<Bill> billNumbersToBill(List<BillNumbersDto> billsForChangeNumber) {
-//        List<Bill> bill = new ArrayList<>(billsForChangeNumber.size());
-////        for (BillNumbersDto b : billsForChangeNumber) {
-//            billsForChangeNumber.stream().map(user -> toDto(user)).forEachOrdered(bill::add);
-//
-////            Bill billFromDto = modelMapper.map(b, Bill.class);
-////            Bill billFromDto = new Bill().builder()
-////                    .billNumber(b.getBillNumber())
-////                    .userUuid(b.getUserUuid())
-////                    .billName(b.getBillName())
-////                    .billUuid(b.getBillUuid())
-////                    .startSum(b.getStartSum())
-////                    .createDate(b.getCreateDate())
-////                    .deleted(b.getDeleted())
-////                    .description(b.getDescription())
-////                    .id(b.getId())
-////                    .build();
-////            bill.add(billFromDto);
-////        }
-//        return bill;
-//    }
-
-
-//    public void checkElementsForCategory(OperationDto operationDto) throws Exception {
-//        Optional<Bill> bill = billRepository.findByUserUuidAndBillUuidAndDeleted(operationDto.getUserUuid(),
-//                operationDto.getBillUuid(), false);
-//        if (!bill.isPresent()) {
-//            //            TODO implementation
-////            LOGGER.info("Bill not exists ", mapper.writeValueAsString(bill));
-////            throw new HomeBuhNotFoundException("bill", operationDto.getBillUuid());
-//        }
-//        Optional<Category> category = categoryRepository.findByUserUuidAndCategoryUuidAndDeletedAndType(operationDto.getUserUuid(),
-//                operationDto.getCategoryUuid(), false, operationDto.getType());
-//        if (!category.isPresent()) {
-//            //            TODO implementation
-////            LOGGER.info("Category not exists ", mapper.writeValueAsString(category));
-////            throw new HomeBuhNotFoundException("category", operationDto.getBillUuid());
-//        }
-//        if (operationDto.getSubcategoryUuid() != null) {
-//            Optional<Subcategory> subcategory = subCategoryRepository.findByUserUuidAndSubcategoryUuidAndCategoryUuidAndDeleted(
-//                    operationDto.getUserUuid(), operationDto.getSubcategoryUuid(), operationDto.getCategoryUuid(), false
-//            );
-//            if (!subcategory.isPresent()) {
-//                //            TODO implementation
-////                LOGGER.info("Subcategory not exists ", mapper.writeValueAsString(subcategory));
-////                throw new HomeBuhNotFoundException("subcategory", operationDto.getBillUuid());
-//            }
-//        }
+    /**
+     * Bill validate
+     */
+    public void checkElementsForCategory(OperationDto operationDto) throws Exception {
+        Optional<Bill> bill = billRepository.findByUserUuidAndBillUuidAndDeleted(operationDto.getUserUuid(),
+                operationDto.getBillUuid(), false);
+        if (!bill.isPresent()) {
+            //            TODO implementation
+//            LOGGER.info("Bill not exists ", mapper.writeValueAsString(bill));
+//            throw new HomeBuhNotFoundException("bill", operationDto.getBillUuid());
+        }
+        Optional<Category> category = categoryRepository.findByUserUuidAndCategoryUuidAndDeletedAndType(operationDto.getUserUuid(),
+                operationDto.getCategoryUuid(), false, operationDto.getType());
+        if (!category.isPresent()) {
+            //            TODO implementation
+//            LOGGER.info("Category not exists ", mapper.writeValueAsString(category));
+//            throw new HomeBuhNotFoundException("category", operationDto.getBillUuid());
+        }
+        if (operationDto.getSubcategoryUuid() != null) {
+            Optional<Subcategory> subcategory = subCategoryRepository.findByUserUuidAndSubcategoryUuidAndCategoryUuidAndDeleted(
+                    operationDto.getUserUuid(), operationDto.getSubcategoryUuid(), operationDto.getCategoryUuid(), false
+            );
+            if (!subcategory.isPresent()) {
+                //            TODO implementation
+//                LOGGER.info("Subcategory not exists ", mapper.writeValueAsString(subcategory));
+//                throw new HomeBuhNotFoundException("subcategory", operationDto.getBillUuid());
+            }
+        }
 //        List<CurrencyFromFeign> listOfCurrency = currencyServiceClient.getAllCurrencyByUser(
 //                operationDto.getUserUuid()
 //        );
-//
-//
+//TODO implementation of checking currency
 //        long countOfMatches = listOfCurrency.stream().filter(c -> c.getAbbr()
 //                .equals(operationDto.getCurrency())).count();
 //
@@ -232,18 +209,18 @@ public class ValidatorService {
 ////            TODO implementation Error bemcome system out print error
 //            System.err.println("WRONG CURRENCY");
 //        }
-//        int x = 0;
-//    }
 
-//    public void checkOperation(String userUuid, String operationUuid, CategoryType type) throws JsonProcessingException {
-//        Optional<Operation> operationOptional = operationRepository.findByUserUuidAndOperationUuidAndTypeAndDeleted(
-//                userUuid, operationUuid, type, false
-//        );
-//        if (!operationOptional.isPresent()) {
-//            //            TODO implementation
-////            LOGGER.info("Operation not exists ", mapper.writeValueAsString(operationOptional.get()));
-////            throw new HomeBuhNotFoundException("operation", operationUuid);
-//        }
-//    }
+    }
+
+    public void checkOperation(String userUuid, String operationUuid, CategoryType type) throws JsonProcessingException {
+        Optional<Operation> operationOptional = operationRepository.findByUserUuidAndOperationUuidAndTypeAndDeleted(
+                userUuid, operationUuid, type, false
+        );
+        if (!operationOptional.isPresent()) {
+            LOGGER.info("Operation not exists ", mapper.writeValueAsString(operationOptional.get()));
+            throw new BillServiceException(ErrorMessages.OPERATION_NOT_FOUND.getErrorMessage() + " "
+                    + operationUuid);
+        }
+    }
 
 }
