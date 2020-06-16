@@ -1,5 +1,8 @@
 package usersservice.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
+//    для свагера
+    @ApiOperation(value="The Get User Details Web Service Endpoint",
+            notes="${userController.GetUser.ApiOperation.Notes}")
+    /**	добавляем значение токена в хедер метода*/
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")
+    })
     public UserRest getUser(@PathVariable String id) {
         UserRest returnValue = new UserRest();
         UserDto userDto = userService.getUserByUserId(id);
@@ -54,6 +64,9 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")
+    })
     @PutMapping(path = "/{id}")
     public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
@@ -64,6 +77,9 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")
+    })
     @DeleteMapping(path = "/{id}")
     public OperationStatusModel deleteUser(@PathVariable String id) {
         OperationStatusModel returnValue = new OperationStatusModel();
@@ -75,7 +91,9 @@ public class UserController {
         return returnValue;
     }
 
-
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")
+    })
     @GetMapping()
     public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
                                    @RequestParam(value = "limit", defaultValue = "2") int limit) {

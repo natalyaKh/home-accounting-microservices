@@ -13,5 +13,6 @@ SignIn (getting JWT Token): using e-mail and password
 а emailVerificationToken будет удален из БД.
 До этого, пока emailVerificationStatus = false логин запрещен.
 
+Swager -> 
 
 !!! Token contains UserID !!!
