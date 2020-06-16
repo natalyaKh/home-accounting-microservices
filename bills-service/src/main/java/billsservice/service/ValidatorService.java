@@ -2,14 +2,22 @@ package billsservice.service;
 
 
 import billsservice.dto.BillNumbersDto;
+import billsservice.dto.SubCategoryDto;
+import billsservice.enums.CategoryType;
 import billsservice.enums.ErrorMessages;
 
 import billsservice.exceptions.AppExceptionsHandler;
 import billsservice.exceptions.BillServiceException;
 import billsservice.model.Bill;
+import billsservice.model.Category;
+import billsservice.model.Subcategory;
 import billsservice.repo.BillRepository;
+import billsservice.repo.CategoryRepository;
+import billsservice.repo.OperationRepository;
+import billsservice.repo.SubCategoryRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.xml.bind.v2.TODO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +35,14 @@ public class ValidatorService {
     private ObjectMapper mapper = new ObjectMapper();
     ModelMapper modelMapper = new ModelMapper();
     //    TODO check user_exists from user_service
-//    @Autowired
-//    CategoryRepository categoryRepository;
-//    @Autowired
-//    SubCategoryRepository subCategoryRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
+    @Autowired
+    SubCategoryRepository subCategoryRepository;
     @Autowired
     BillRepository billRepository;
-//    @Autowired
-//    OperationRepository operationRepository;
+    @Autowired
+    OperationRepository operationRepository;
 //    @Autowired
 //    CurrencyServiceClient currencyServiceClient;
 
@@ -96,60 +104,72 @@ public class ValidatorService {
         return billFromDto;
     }
 
+    /**
+     * Subcategory validate
+     */
+    public void checkCategoryAndSubCategoryForSaveSubCategory(SubCategoryDto subCategoryDto) {
+        Optional<Subcategory> subcategoryOptional = subCategoryRepository
+                .findByUserUuidAndCategoryUuidAndSubcategoryNameAndDeletedAndType(
+                        subCategoryDto.getUserUuid(), subCategoryDto.getCategory().getCategoryUuid(),
+                        subCategoryDto.getSubCategoryName(), false, subCategoryDto.getType());
+        if (subcategoryOptional.isPresent()) {
+            LOGGER.info("Subcategory with name {} exists ", subCategoryDto.getSubCategoryName());
+            throw  new BillServiceException(ErrorMessages.SUBCATEGORY_ALREADY_EXISTS.getErrorMessage() + " "
+                    + subCategoryDto.getSubCategoryName());
+        }
+        /** check category*/
+        Optional<Category> categoryOptional = categoryRepository.findByUserUuidAndCategoryNameAndDeletedAndType(
+                subCategoryDto.getUserUuid(),
+                subCategoryDto.getCategory().getCategoryName(),
+                false,
+                subCategoryDto.getType());
+        Optional<Category> categoryUuidOptional = categoryRepository.findByUserUuidAndCategoryUuidAndDeleted(
+                subCategoryDto.getUserUuid(),
+                subCategoryDto.getCategory().getCategoryUuid(), false);
 
-//    public void checkUniqOfCategory(String userUuid, String categoryName, CategoryType type) throws JsonProcessingException {
-//        Optional<Category> category = categoryRepository.findByUserUuidAndCategoryNameAndTypeAndDeleted(
-//                userUuid, categoryName, type, false);
-//        if (category.isPresent()) {
-////            TODO implementation
-////            LOGGER.info("Category exists ", mapper.writeValueAsString(category));
-////            throw new HomeBuhNotUniqueException("category", "name " + categoryName);
-//
-//        }
-//    }
+        if (!categoryOptional.isPresent() || !categoryUuidOptional.isPresent()) {
+            LOGGER.info("Category {} or subcategory {} dont exists ", subCategoryDto.getCategory().getCategoryName(),
+                    subCategoryDto.getSubCategoryName());
+            throw  new BillServiceException(ErrorMessages.CATEGORY_NOT_FOUND.getErrorMessage() + " "
+                    + subCategoryDto.getCategory().getCategoryName());
+        }
+    }
 
-//    public void checkCategoryExists(String uuid, String userUuid) throws JsonProcessingException {
-//        Optional<Category> category = categoryRepository.findByUserUuidAndCategoryUuidAndDeleted(userUuid, uuid, false);
-//        if (!category.isPresent()) {
-//            //            TODO implementation
-////            LOGGER.info("Category exists ", mapper.writeValueAsString(category));
-////            throw new HomeBuhNotFoundException("category", uuid);
-//        }
-//    }
+        public void checkSubcategoryExists(String userUuid, String subcategoryUuid) throws JsonProcessingException {
+        Optional<Subcategory> subcategory = subCategoryRepository.findByUserUuidAndSubcategoryUuidAndDeleted(
+                userUuid, subcategoryUuid, false);
+        if (!subcategory.isPresent()) {
+            LOGGER.info("Subcategory exists ", mapper.writeValueAsString(subcategory));
+            throw new BillServiceException(ErrorMessages.SUBCATEGORY_NOT_FOUND.getErrorMessage() + " "
+                    + subcategory.get().getSubcategoryName());
+        }
+    }
 
-//    public void checkCategoryAndSubCategoryForSaveSubCategory(String userUuid, String categoryUuid,
-//                                                              String subcategoryName, String categoryName,
-//                                                              CategoryType type) {
-//        Optional<Subcategory> subcategoryOptional = subCategoryRepository
-//                .findByUserUuidAndCategoryUuidAndSubcategoryNameAndDeletedAndType(
-//                        userUuid, categoryUuid, subcategoryName, false, type);
-//        if (subcategoryOptional.isPresent()) {
-//
-//            //            TODO implementation
-////                         LOGGER.info("Subcategory with name {} exists ", subcategoryName);
-////            throw new HomeBuhNotUniqueException("subCategory", "name " + subcategoryName);
-//        }
-//        Optional<Category> categoryOptional = categoryRepository.findByUserUuidAndCategoryNameAndDeletedAndType(userUuid,
-//                categoryName, false, type);
-//        Optional<Category> categoryUuidOptional = categoryRepository.findByUserUuidAndCategoryUuidAndDeleted(
-//                userUuid, categoryUuid, false);
-//
-//        if (!categoryOptional.isPresent() || !categoryUuidOptional.isPresent()) {
-//            //            TODO implementation
-////            LOGGER.info("Category {} or subcategory {} dont exists ", categoryName, subcategoryName);
-////            throw new HomeBuhNotFoundException("category", " or name " + categoryName + " " + categoryUuid);
-//        }
-//    }
+    /**
+     * Category validate
+     */
 
-//    public void checkSubcategoryExists(String userUuid, String subcategoryUuid) throws JsonProcessingException {
-//        Optional<Subcategory> subcategory = subCategoryRepository.findByUserUuidAndSubcategoryUuidAndDeleted(
-//                userUuid, subcategoryUuid, false);
-//        if (!subcategory.isPresent()) {
-//            //            TODO implementation
-////            LOGGER.info("Subcategory exists ", mapper.writeValueAsString(subcategory));
-////            throw new HomeBuhNotFoundException("subcategory", subcategoryUuid);
-//        }
-//    }
+    public void checkUniqOfCategory(String userUuid, String categoryName, CategoryType type) throws JsonProcessingException {
+        Optional<Category> category = categoryRepository.findByUserUuidAndCategoryNameAndTypeAndDeleted(
+                userUuid, categoryName, type, false);
+        if (category.isPresent()) {
+            LOGGER.info("Category exists ", mapper.writeValueAsString(category));
+            throw new BillServiceException(ErrorMessages.CATEGORY_ALREADY_EXISTS. getErrorMessage() +
+                    " " + categoryName);
+        }
+    }
+
+    public void checkCategoryExists(String uuid, String userUuid) throws JsonProcessingException {
+        Optional<Category> category = categoryRepository.findByUserUuidAndCategoryUuidAndDeleted(userUuid, uuid, false);
+        if (!category.isPresent()) {
+            LOGGER.info("Category exists ", mapper.writeValueAsString(category));
+            throw new BillServiceException(ErrorMessages.CATEGORY_NOT_FOUND. getErrorMessage() +
+                    " " + category.get().getCategoryName());
+        }
+    }
+
+
+
 
 
 //    public List<Bill> billNumbersToBill(List<BillNumbersDto> billsForChangeNumber) {
