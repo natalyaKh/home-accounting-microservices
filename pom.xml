@@ -27,6 +27,7 @@
         <module>users-service</module>
         <module>send-email-service</module>
         <module>discovery-service</module>
+        <module>zuul-service</module>
     </modules>
 
     <licenses>
