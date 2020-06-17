@@ -32,6 +32,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /**добавляет cors*/
                 .cors().and()
                 .csrf().disable().authorizeRequests()
+                .antMatchers("/test/**")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
                 .permitAll()
                 /**проверка e-mail - разрешена всем**/
