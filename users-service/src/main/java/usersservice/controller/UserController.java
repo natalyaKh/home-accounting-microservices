@@ -29,14 +29,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     @Autowired
-    Environment env;
-    @Autowired
     UserServiceImpl userService;
-
-    @GetMapping("/test")
-    public String testWork() {
-        return "I am working on port: " + env.getProperty("server.port");
-    }
 
     @PostMapping()
     public UserRest createUser(@Validated @RequestBody UserDetailsRequestModel userDetails) throws Exception {
