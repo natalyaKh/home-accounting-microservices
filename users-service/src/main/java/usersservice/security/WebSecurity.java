@@ -1,6 +1,7 @@
 package usersservice.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,10 +21,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private final UserService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private Environment env;
 
-    public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,
+                       Environment env) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.env = env;
     }
 
     @Override
@@ -32,6 +36,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /**добавляет cors*/
                 .cors().and()
                 .csrf().disable().authorizeRequests()
+//                /** разрешаем доступ для получения запосов с конкретного IP */
+//                .antMatchers("/**")
+//                .hasIpAddress(env.getProperty("gateway.ip"))
+                /** проверка pingController - разрешена всем */
                 .antMatchers("/test/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
