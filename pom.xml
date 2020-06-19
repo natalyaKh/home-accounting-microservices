@@ -86,7 +86,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
         </dependency>
-<!--        ACTUATOR-->
+        <!--        ACTUATOR-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -150,6 +150,10 @@
                         </goals>
                         <configuration>
                             <additionalProperties>
+                                <encoding.source>UTF-8</encoding.source>
+                                <encoding.reporting>UTF-8</encoding.reporting>
+                                <java.source>${maven.compiler.source}</java.source>
+                                <java.target>${maven.compiler.target}</java.target>
                                 <java.target>${maven.compiler.target}</java.target>
                                 <time>${maven.build.timestamp}</time>
                             </additionalProperties>
