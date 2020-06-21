@@ -1,7 +1,10 @@
-package usersservice.hystrix;
+package usersservice.service.hystrix;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import usersservice.dto.UserDto;
+import usersservice.service.hystrix.EmailServiceClient;
 
 
 import javax.print.attribute.standard.Destination;
@@ -10,28 +13,31 @@ import java.util.Map;
 
 @Service
 public class SendMail {
-    public boolean verifyEmail(UserDto userDto) {
+
+    @Autowired
+    EmailServiceClient emailServiceClient;
+    @Autowired
+    Environment environment;
+
+    public Boolean verifyEmail(UserDto userDto) {
         final int MAP_SIZE = 4;
-        boolean returnValue = false;
-        //TODO impolementation of sending mail
         Map<String, String> sendBody = new HashMap<>(MAP_SIZE);
         sendBody.put("tokenValue", userDto.getEmailVerificationToken());
         sendBody.put("userName", userDto.getFirstName());
         sendBody.put("userLastName", userDto.getLastName());
         sendBody.put("email", userDto.getEmail());
-        System.out.println("verification email sent!");
-        return returnValue;
+        String token = environment.getProperty("admin.token");
+        emailServiceClient.sendVerificationEmail(sendBody, token);
+        return true;
     }
 
-    public boolean sendPasswordResetRequest(String firstName, String email, String token) {
+    public Boolean sendPasswordResetRequest(String firstName, String email, String token) {
         final int MAP_SIZE = 3;
-        //TODO impolementation of sending mail
         Map<String, String> sendBody = new HashMap<>(MAP_SIZE);
         sendBody.put("tokenValue", token);
         sendBody.put("firstName", firstName);
         sendBody.put("email", email);
         System.out.println("Change password email sent!");
-        boolean returnValue = true;
-        return returnValue;
+        return emailServiceClient.sendChangePasswordEmail(sendBody, token);
     }
 }

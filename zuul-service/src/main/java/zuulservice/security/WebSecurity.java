@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import zuulservice.security.AuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +22,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.csrf().disable();
         http.headers().frameOptions().disable();
         http.authorizeRequests()
@@ -32,6 +30,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(environment.getProperty("api.users.actuator.url.path")).permitAll()
                 .antMatchers(environment.getProperty("api.zuul.actuator.url.path")).permitAll()
                 .antMatchers(environment.getProperty("api.h2console.url.path")).permitAll()
+                .antMatchers(HttpMethod.POST, environment.getProperty("api.email.verification.url.path")).permitAll()
                 .antMatchers(HttpMethod.POST, environment.getProperty("api.registration.url.path")).permitAll()
                 .antMatchers(HttpMethod.POST, environment.getProperty("api.login.url.path")).permitAll()
                 .antMatchers(HttpMethod.POST, environment.getProperty("api.change-password.request.url.path")).permitAll()
@@ -41,7 +40,5 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthorizationFilter(authenticationManager(), environment));
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
     }
-
 }

@@ -36,6 +36,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /**добавляет cors*/
                 .cors().and()
                 .csrf().disable().authorizeRequests()
+//        .antMatchers("/users/**").permitAll()
 //                /** разрешаем доступ для получения запосов с конкретного IP */
 //                .antMatchers("/**")
 //                .hasIpAddress(env.getProperty("gateway.ip"))
@@ -56,7 +57,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /** доступ к свагеру */
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .permitAll()
-                .anyRequest().authenticated().and()
+                .antMatchers("/users/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 /**
                  * фильтр для всех обьектов, которые проходят через процедуру аутентификации
                  */
@@ -84,6 +87,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/users/login");
         return filter;
     }
+
     /**
      * добавляет cors
      *

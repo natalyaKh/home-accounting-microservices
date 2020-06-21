@@ -47,7 +47,11 @@ public class EmailController {
         message.setContent(htmlMsg, "text/html");
         helper.setTo(email);
         helper.setSubject("Verification email from" + APPLICATION_NAME);
-        this.emailSender.send(message);
+        try{
+            this.emailSender.send(message);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
         return "Email send!";
     }
 

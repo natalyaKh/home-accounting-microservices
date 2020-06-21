@@ -1,6 +1,10 @@
 package usersservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import usersservice.enums.ErrorMessages;
-import usersservice.hystrix.SendMail;
+import usersservice.service.hystrix.SendMail;
 import usersservice.models.entity.PasswordResetTokenEntity;
 import usersservice.repository.PasswordResetTokenRepository;
 import usersservice.utils.Utils;
@@ -28,6 +32,8 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(usersservice.service.UserServiceImpl.class);
+    private ObjectMapper mapper = new ObjectMapper();
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     UserRepository userRepository;
@@ -40,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     SendMail sendMail;
 
-    public UserDto createUser(UserDto user) {
+    public UserDto createUser(UserDto user) throws JsonProcessingException {
 
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new UserServiceException(ErrorMessages.USER_ALREADY_EXISTS.name());
@@ -54,10 +60,10 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
         UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
-        sendMail.verifyEmail(returnValue);
+        Boolean sendingResult = sendMail.verifyEmail(returnValue);
+        LOGGER.info("verificatiWebSecurity on email was send to email " + storedUserDetails.getEmail());
         return returnValue;
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
