@@ -17,15 +17,18 @@ import billsservice.repo.BillRepository;
 import billsservice.repo.CategoryRepository;
 import billsservice.repo.OperationRepository;
 import billsservice.repo.SubCategoryRepository;
+import billsservice.service.hystrix.CurrencyDTO;
+import billsservice.service.hystrix.CurrencyServiceClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.bind.v2.TODO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +48,10 @@ public class ValidatorService {
     BillRepository billRepository;
     @Autowired
     OperationRepository operationRepository;
-//    @Autowired
-//    CurrencyServiceClient currencyServiceClient;
+    @Autowired
+    CurrencyServiceClient currencyServiceClient;
+    @Autowired
+    Environment env;
 
 
     /**
@@ -74,6 +79,7 @@ public class ValidatorService {
             throw new BillServiceException(ErrorMessages.BILL_NOT_FOUND.getErrorMessage() + " " + billUuid);
         }
     }
+
     public void checkBillUniq(String billName, String userUuid) throws JsonProcessingException, AppExceptionsHandler {
         Optional<Bill> billOptional = billRepository.findByUserUuidAndBillNameAndDeleted(userUuid, billName, false);
         if (billOptional.isPresent()) {
@@ -116,7 +122,7 @@ public class ValidatorService {
                         subCategoryDto.getSubCategoryName(), false, subCategoryDto.getType());
         if (subcategoryOptional.isPresent()) {
             LOGGER.info("Subcategory with name {} exists ", subCategoryDto.getSubCategoryName());
-            throw  new BillServiceException(ErrorMessages.SUBCATEGORY_ALREADY_EXISTS.getErrorMessage() + " "
+            throw new BillServiceException(ErrorMessages.SUBCATEGORY_ALREADY_EXISTS.getErrorMessage() + " "
                     + subCategoryDto.getSubCategoryName());
         }
         /** check category*/
@@ -132,12 +138,12 @@ public class ValidatorService {
         if (!categoryOptional.isPresent() || !categoryUuidOptional.isPresent()) {
             LOGGER.info("Category {} or subcategory {} dont exists ", subCategoryDto.getCategory().getCategoryName(),
                     subCategoryDto.getSubCategoryName());
-            throw  new BillServiceException(ErrorMessages.CATEGORY_NOT_FOUND.getErrorMessage() + " "
+            throw new BillServiceException(ErrorMessages.CATEGORY_NOT_FOUND.getErrorMessage() + " "
                     + subCategoryDto.getCategory().getCategoryName());
         }
     }
 
-        public void checkSubcategoryExists(String userUuid, String subcategoryUuid) throws JsonProcessingException {
+    public void checkSubcategoryExists(String userUuid, String subcategoryUuid) throws JsonProcessingException {
         Optional<Subcategory> subcategory = subCategoryRepository.findByUserUuidAndSubcategoryUuidAndDeleted(
                 userUuid, subcategoryUuid, false);
         if (!subcategory.isPresent()) {
@@ -156,7 +162,7 @@ public class ValidatorService {
                 userUuid, categoryName, type, false);
         if (category.isPresent()) {
             LOGGER.info("Category exists ", mapper.writeValueAsString(category));
-            throw new BillServiceException(ErrorMessages.CATEGORY_ALREADY_EXISTS. getErrorMessage() +
+            throw new BillServiceException(ErrorMessages.CATEGORY_ALREADY_EXISTS.getErrorMessage() +
                     " " + categoryName);
         }
     }
@@ -165,7 +171,7 @@ public class ValidatorService {
         Optional<Category> category = categoryRepository.findByUserUuidAndCategoryUuidAndDeleted(userUuid, uuid, false);
         if (!category.isPresent()) {
             LOGGER.info("Category exists ", mapper.writeValueAsString(category));
-            throw new BillServiceException(ErrorMessages.CATEGORY_NOT_FOUND. getErrorMessage() +
+            throw new BillServiceException(ErrorMessages.CATEGORY_NOT_FOUND.getErrorMessage() +
                     " " + category.get().getCategoryName());
         }
     }
@@ -173,7 +179,7 @@ public class ValidatorService {
     /**
      * Bill category
      */
-    public void checkElementsForCategory(OperationDto operationDto) throws Exception {
+    public void checkElementsForCategory(OperationDto operationDto, HttpServletRequest req) throws Exception {
         Optional<Bill> bill = billRepository.findByUserUuidAndBillUuidAndDeleted(operationDto.getUserUuid(),
                 operationDto.getBillUuid(), false);
         if (!bill.isPresent()) {
@@ -196,20 +202,21 @@ public class ValidatorService {
 
                 LOGGER.info("Subcategory not exists ", mapper.writeValueAsString(subcategory));
                 throw new BillServiceException(ErrorMessages.SUBCATEGORY_ALREADY_EXISTS.getErrorMessage() + " "
-           + subcategory.get().getSubcategoryName());
+                        + subcategory.get().getSubcategoryName());
             }
         }
-//        List<CurrencyFromFeign> listOfCurrency = currencyServiceClient.getAllCurrencyByUser(
-//                operationDto.getUserUuid()
-//        );
-//TODO implementation of checking currency
-//        long countOfMatches = listOfCurrency.stream().filter(c -> c.getAbbr()
-//                .equals(operationDto.getCurrency())).count();
-//
-//        if (countOfMatches == 0) {
-////            TODO implementation Error bemcome system out print error
-//            System.err.println("WRONG CURRENCY");
-//        }
+        String token = req.getHeader(env.getProperty("authorization.token.header.name"));
+        List<CurrencyDTO> listOfCurrency = currencyServiceClient.getAllCurrencyByUser(
+                operationDto.getUserUuid(), token
+        );
+
+        long countOfMatches = listOfCurrency.stream().filter(c -> c.getAbbr()
+                .equals(operationDto.getCurrency())).count();
+
+        if (countOfMatches == 0) {
+            throw new BillServiceException(ErrorMessages.CURRENCY_NOT_FOUND.getErrorMessage() + " "
+                    + operationDto.getCurrency());
+        }
 
     }
 

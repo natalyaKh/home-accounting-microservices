@@ -11,6 +11,7 @@ public enum ErrorMessages {
     SUBCATEGORY_NOT_FOUND("subcategory with provided id is not found. Id of subcategory: " ),
     CATEGORY_ALREADY_EXISTS("category already exists. Name of category:"),
     OPERATION_NOT_FOUND("operation with provided id is not found. Id of operation: " ),
+    CURRENCY_NOT_FOUND("currency with provided id is not found. Abbr of currency: " ),
     INTERNAL_SERVER_ERROR("Internal server error"),
     AUTHENTICATION_FAILED("Authentication failed"),
     COULD_NOT_UPDATE_RECORD("Could not update record"),

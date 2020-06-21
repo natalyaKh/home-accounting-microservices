@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +26,9 @@ public class OperationController {
     ValidatorService validatorService;
 
     @PostMapping()
-    public OperationDto addOperation(@Valid @RequestBody final OperationDto operationDto) throws Exception {
-        validatorService.checkElementsForCategory(operationDto);
+    public OperationDto addOperation(@Valid @RequestBody final OperationDto operationDto, HttpServletRequest req) throws Exception {
+
+        validatorService.checkElementsForCategory(operationDto, req);
         if(operationDto.getDescription() == null){
             operationDto.setDescription("");
         }
