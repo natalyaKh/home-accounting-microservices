@@ -1,86 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>home-acc</groupId>
-		<artifactId>home-acc-beta-2</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>home-acc</groupId>
+        <artifactId>home-acc-beta-2</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>home-acc</groupId>
-	<artifactId>zuul-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>zuul-service</name>
-	<description>zuul service for project "Home accounting"</description>
-<dependencies>
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-			</dependency>
-	<dependency>
-		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-	</dependency>
-	<!--securoty-->
-	<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-security</artifactId>
-			</dependency>
-	<!--		token-->
-	<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-	<dependency>
-		<groupId>io.jsonwebtoken</groupId>
-		<artifactId>jjwt</artifactId>
-		<version>0.9.1</version>
-	</dependency>
-	<!--		Error java.lang.ClassNotFoundException: javax.xml.bind.DatatypeConverter-->
-	<dependency>
-		<groupId>javax.xml.bind</groupId>
-		<artifactId>jaxb-api</artifactId>
-		<version>2.3.1</version>
-	</dependency>
-	<!--        config-->
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-config</artifactId>
-			</dependency>
-	<!--		bus-->
-	<dependency>
-		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-starter-bus-amqp</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-devtools</artifactId>
-		<scope>runtime</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-test</artifactId>
-		<scope>test</scope>
-	</dependency>
-	<!--actuator-->
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-actuator</artifactId>
-	</dependency>
-	<!--		<dependency>-->
-	<!--			<groupId>org.springframework.cloud</groupId>-->
-	<!--			<artifactId>spring-cloud-starter-zipkin</artifactId>-->
-	<!--		</dependency>-->
+    <groupId>home-acc</groupId>
+    <artifactId>zuul-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>zuul-service</name>
+    <description>zuul service for project "Home accounting"</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+        </dependency>
+        <!--securoty-->
+        <!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!--		token-->
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <!--		Error java.lang.ClassNotFoundException: javax.xml.bind.DatatypeConverter-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!--        config-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
 
-</dependencies>
-<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</repository>
-	</repositories>
+
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+    </repositories>
 </project>

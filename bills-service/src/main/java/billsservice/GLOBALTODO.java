@@ -5,4 +5,5 @@ public class GLOBALTODO {
 //    TODO check if user exist in all create (from tolen???) разрешить только себе
 //    TODO currency-service  made PingController
 //    TODO разобраться с конфиг сервек + эврика
+//    TODO свойства email-service регистрация в Эврика
 }

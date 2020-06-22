@@ -16,3 +16,6 @@ SignIn (getting JWT Token): using e-mail and password
 Swager -> 
 
 !!! Token contains UserID !!!
+
+
+http://localhost:8082/actuator/hystrix.stream
