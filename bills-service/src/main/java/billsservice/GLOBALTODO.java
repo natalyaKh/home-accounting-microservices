@@ -1,5 +1,11 @@
 package billsservice;
 
 public class GLOBALTODO {
-//    TODO при создании счета дата создания null
+//    TODO JUniTest
+//    TODO ControllersTest
+//    TODO Docker
+//    TODO CircleCI
+//    TODO READMEFILE GLOBAL
+//    TODO documentation
+//    TODO swagger
 }
