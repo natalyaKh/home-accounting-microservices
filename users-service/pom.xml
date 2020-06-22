@@ -100,6 +100,12 @@
             <artifactId>spring-security-crypto</artifactId>
             <version>5.3.3.RELEASE</version>
         </dependency>
+<!--		zipkin + sleuth-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
 <!--		<dependency>-->
 <!--			<groupId>io.springfox</groupId>-->
