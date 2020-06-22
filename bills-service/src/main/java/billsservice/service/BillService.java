@@ -45,9 +45,11 @@ public class BillService {
 
         Bill bill = DtoToBill(billDto);
         bill.setDeleted(false);
-        billRepository.save(bill);
+        Bill savedBill = billRepository.save(bill);
         LOGGER.info("Bill saves  {}", mapper.writeValueAsString(bill));
         billDto.setBillUuid(bill.getBillUuid());
+        billDto.setCreateDate(savedBill.getCreateDate());
+        savedBill.getCreateDate();
         return billDto;
     }
 

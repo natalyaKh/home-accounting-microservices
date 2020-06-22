@@ -18,8 +18,6 @@ public class CurrencyController {
     CurrencyService currencyService;
     @PostMapping()
     public Currency createCurrency(@RequestHeader HttpHeaders header, @RequestBody final Currency currency) throws JsonProcessingException {
-//        List<String> userId = header.get("userId");
-//        TODO get userUuid from header
         return currencyService.addCurrency(currency);
     }
     @GetMapping("/{userUuid}")

@@ -3,6 +3,7 @@ package billsservice.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 
 @AllArgsConstructor
@@ -20,4 +21,5 @@ public class BillDto {
     @NotNull(message = "user_uuid may not be null")
     String userUuid;
     String description;
+    Date createDate;
 }
