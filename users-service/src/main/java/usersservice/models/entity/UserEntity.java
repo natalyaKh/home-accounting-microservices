@@ -1,5 +1,7 @@
 package usersservice.models.entity;
 
+import usersservice.enums.InterfaceLang;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,14 +37,24 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private InterfaceLang lang;
 
 
+    public void setLang(InterfaceLang lang) {
+        this.lang = lang;
+    }
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public InterfaceLang getLang() {
+        return lang;
     }
 
     public String getUserId() {

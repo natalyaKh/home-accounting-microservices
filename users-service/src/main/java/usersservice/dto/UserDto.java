@@ -1,6 +1,7 @@
 package usersservice.dto;
 
 import lombok.*;
+import usersservice.enums.InterfaceLang;
 import usersservice.models.entity.UserEntity;
 
 import java.io.Serializable;
@@ -23,4 +24,5 @@ public class UserDto implements Serializable{
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+    private InterfaceLang lang;
 }

@@ -1,6 +1,7 @@
 package usersservice.models.request;
 
 import lombok.*;
+import usersservice.enums.InterfaceLang;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -27,4 +28,7 @@ public class UserDetailsRequestModel {
     @NotNull(message = "Password cannot be null")
     @Size(min=2, message= "password must not be less than two characters")
     private String password;
+
+    @NotNull(message = "Language cannot be null")
+    private InterfaceLang lang;
 }
