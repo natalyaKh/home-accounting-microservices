@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import usersservice.enums.ErrorMessages;
 
 import java.util.Map;
 
@@ -26,6 +27,16 @@ public interface EmailServiceClient {
     Boolean sendChangePasswordEmail(@RequestBody Map<String, String> sendBody,
                                     @RequestHeader("Authorization")
                                             String token);
+
+    @PostMapping("/clean-not-confirmed-mail")
+    @Headers("Authorization: {token}")
+    public String cleanNotConfirmEmails( @RequestHeader("Authorization")
+                                                  String token);
+    @PostMapping("/error-mail")
+    @Headers("Authorization: {token}")
+    public String errorMessage(
+            ErrorMessages cleanDatabaseError,
+            @RequestHeader("Authorization") String token);
 
     @Component
     class CurrencyFallbackFactory implements FallbackFactory<EmailServiceClient> {
@@ -56,6 +67,28 @@ public interface EmailServiceClient {
             }
 
             return "Verification email has been send";
+        }
+
+        @Override
+        public String cleanNotConfirmEmails(String token) {
+                if (cause instanceof FeignException && ((FeignException) cause).status() == 404) {
+                    logger.error("404 error took place when cleanNotConfirmEmails was called. Error message: "
+                            + cause.getLocalizedMessage());
+                } else {
+                    logger.error("Other error took place: " + cause.getLocalizedMessage());
+                }
+                return "send";
+        }
+
+        @Override
+        public String errorMessage( ErrorMessages cleanDatabaseError, String token) {
+            if (cause instanceof FeignException && ((FeignException) cause).status() == 404) {
+                logger.error("404 error took place when errorMessage was called. Error message: "
+                        + cause.getLocalizedMessage());
+            } else {
+                logger.error("Other error took place: " + cause.getLocalizedMessage());
+            }
+            return "send";
         }
 
         @Override

@@ -4,6 +4,7 @@ package usersservice.service.hystrix;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import usersservice.enums.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,28 @@ class EmailServiceClientFallback implements EmailServiceClient {
 			logger.error("Other error took place: " + cause.getLocalizedMessage());
 		}
 		return true;
+	}
+
+	@Override
+	public String cleanNotConfirmEmails(String token) {
+		if (cause instanceof FeignException && ((FeignException) cause).status() == 404) {
+			logger.error("404 error took place when cleanNotConfirmEmails was called . Error message: "
+					+ cause.getLocalizedMessage());
+		} else {
+			logger.error("Other error took place: " + cause.getLocalizedMessage());
+		}
+		return "send";
+	}
+
+	@Override
+	public String errorMessage(ErrorMessages cleanDatabaseError, String token) {
+		if (cause instanceof FeignException && ((FeignException) cause).status() == 404) {
+			logger.error("404 error took place when errorMessage was called . Error message: "
+					+ cause.getLocalizedMessage());
+		} else {
+			logger.error("Other error took place: " + cause.getLocalizedMessage());
+		}
+		return "send";
 	}
 
 }

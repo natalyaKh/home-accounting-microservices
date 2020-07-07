@@ -1,13 +1,13 @@
 package usersservice.controller;
 
+
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import usersservice.dto.UserDto;
@@ -18,7 +18,8 @@ import usersservice.models.request.UserDetailsRequestModel;
 import usersservice.models.responce.OperationStatusModel;
 import usersservice.enums.RequestOperationStatus;
 import usersservice.models.responce.UserRest;
-import usersservice.service.UserServiceImpl;
+import usersservice.service.UserService;
+
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -28,8 +29,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
+
+    @GetMapping("/create-admin")
+    public String createSuperAdmin() {
+        userService.createSuperAdmin();
+        return "super admin created";
+    }
+    @DeleteMapping("/delete-admin/{adminId}")
+    public String deleteSuperAdmin(@PathVariable String adminId){
+        userService.deleteUser(adminId);
+        return "Super admin deleted";
+    }
+
 
     @PostMapping()
     public UserRest createUser(@Validated @RequestBody UserDetailsRequestModel userDetails) throws Exception {

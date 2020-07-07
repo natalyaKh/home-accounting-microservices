@@ -81,5 +81,52 @@ public class EmailController {
         this.emailSender.send(message);
         return "Email send!";
     }
+
+
+    @PostMapping("/clean-not-confirmed-mail")
+    String sendCleanNotConfirmEmails() throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+
+        String ADMIN_EMAIL = env.getProperty("admin.email.address");
+
+        boolean multipart = true;
+        MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
+//        The HTML body for the email.
+        final String htmlMsg =
+                 "Hi, admin ! "
+                + "Users with not confirmed emails was deleted from data base";
+
+        message.setContent(htmlMsg, "text/html");
+
+        helper.setTo(ADMIN_EMAIL);
+        helper.setSubject("Cleaning email from " + APPLICATION_NAME);
+        this.emailSender.send(message);
+        return "Email send!";
+    }
+
+    @PostMapping("/error-mail")
+    String sendErrorEmail() throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+
+        String ADMIN_EMAIL = env.getProperty("admin.email.address");
+
+        boolean multipart = true;
+        MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
+//        The HTML body for the email.
+        final String htmlMsg =
+                 "Hi, admin ! "
+                + "something was wrong during deleting users with not confirm" +
+                         "emails from data base" +
+                         "<p> Please, check it";
+
+        message.setContent(htmlMsg, "text/html");
+
+        helper.setTo(ADMIN_EMAIL);
+        helper.setSubject("Cleaning email from " + APPLICATION_NAME);
+        this.emailSender.send(message);
+        return "Email send!";
+    }
+
+
 }
 

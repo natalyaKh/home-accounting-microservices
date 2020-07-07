@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import usersservice.dto.UserDto;
+import usersservice.enums.ErrorMessages;
 import usersservice.service.hystrix.EmailServiceClient;
 
 
@@ -39,5 +40,15 @@ public class SendMail {
         sendBody.put("email", email);
         System.out.println("Change password email sent!");
         return emailServiceClient.sendChangePasswordEmail(sendBody, token);
+    }
+
+    public String cleanNotConfirmEmails(){
+        String token = environment.getProperty("admin.token");
+        return emailServiceClient.cleanNotConfirmEmails(token);
+    }
+
+    public String errorMessage(ErrorMessages cleanDatabaseError) {
+        String token = environment.getProperty("admin.token");
+        return emailServiceClient.errorMessage(cleanDatabaseError, token);
     }
 }

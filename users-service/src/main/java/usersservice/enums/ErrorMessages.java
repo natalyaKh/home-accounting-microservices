@@ -10,7 +10,9 @@ public enum ErrorMessages {
     COULD_NOT_UPDATE_RECORD("Could not update record"),
     COULD_NOT_DELETE_RECORD("Could not delete record"),
     EMAIL_ADDRESS_NOT_VERIFIED("Email address could not be verified"),
-    USER_ALREADY_EXISTS ("Record already exists");
+    USER_ALREADY_EXISTS ("Record already exists"),
+    CLEAN_DATABASE_ERROR("Can`t clean db, check what happened");
+
     private String errorMessage;
 
     ErrorMessages(String errorMessage) {

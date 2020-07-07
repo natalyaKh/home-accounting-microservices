@@ -18,4 +18,4 @@ Swager ->
 !!! Token contains UserID !!!
 
 
-http://localhost:8082/actuator/hystrix.stream
+http://localhost:8082/actuator/shedulerservice.hystrix.stream

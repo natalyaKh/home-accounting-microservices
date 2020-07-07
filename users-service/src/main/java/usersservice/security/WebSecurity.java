@@ -43,7 +43,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 /** проверка pingController - разрешена всем */
                 .antMatchers("/test/**")
                 .permitAll()
+                .antMatchers("/clean-data/**")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+                .permitAll()
+                /** создание администратора - разрешено всем*/
+                .antMatchers(HttpMethod.GET, SecurityConstants.CREATE_ADMIN)
                 .permitAll()
                 /**проверка e-mail - разрешена всем**/
                 .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL)
