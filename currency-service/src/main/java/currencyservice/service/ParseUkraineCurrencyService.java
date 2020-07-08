@@ -45,11 +45,8 @@ public class ParseUkraineCurrencyService {
     private UkraineCurrency toCurrency(Element el) {
         UkraineCurrency ukraineCurrency = UkraineCurrency.builder()
                 .name(el.select("txt").get(0).childNode(0).toString().trim())
-//                .country(el.select("COUNTRY").get(0).childNode(0).toString().trim())
                 .abbr(el.select("cc").get(0).childNode(0).toString().trim())
-//                .changeCourse(Double.valueOf(el.select("CHANGE").get(0).childNode(0).toString()))
                 .rate(Double.valueOf(el.select("rate").get(0).childNode(0).toString()))
-//                .quantity(Double.valueOf(el.select("UNIT").get(0).childNode(0).toString()))
                 .build();
         return ukraineCurrency;
     }
