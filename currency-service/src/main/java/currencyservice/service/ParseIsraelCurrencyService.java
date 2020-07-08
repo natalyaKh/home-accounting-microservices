@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 public class ParseIsraelCurrencyService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(currencyservice.service.ParseService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParseIsraelCurrencyService.class);
 
     @Value("${israel.currency.xml}")
     private String link;
