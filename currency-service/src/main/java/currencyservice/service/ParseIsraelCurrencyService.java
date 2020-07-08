@@ -50,9 +50,9 @@ public class ParseIsraelCurrencyService {
 
     private IsraelCurrency toCurrency(Element el) {
         IsraelCurrency israelCurrency = IsraelCurrency.builder()
-                .name(el.select("NAME").get(0).childNode(0).toString())
-                .country(el.select("COUNTRY").get(0).childNode(0).toString())
-                .abbr(el.select("CURRENCYCODE").get(0).childNode(0).toString())
+                .name(el.select("NAME").get(0).childNode(0).toString().trim())
+                .country(el.select("COUNTRY").get(0).childNode(0).toString().trim())
+                .abbr(el.select("CURRENCYCODE").get(0).childNode(0).toString().trim())
                 .changeCourse(Double.valueOf(el.select("CHANGE").get(0).childNode(0).toString()))
                 .rate(Double.valueOf(el.select("RATE").get(0).childNode(0).toString()))
                 .quantity(Double.valueOf(el.select("UNIT").get(0).childNode(0).toString()))
