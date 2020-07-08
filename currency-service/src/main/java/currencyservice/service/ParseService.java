@@ -63,6 +63,50 @@ public class ParseService {
         LOGGER.info("getting List of default currency");
         return currencies;
     }
+
+//    public void parseIsraBankXml() throws IOException {
+//        String url = "https://www.boi.org.il/currency.xml";
+//        Document page = Jsoup.connect(url).get();
+//
+//        ArrayList<Element> elements = page.getElementsByTag("CURRENCY");
+//        List<IsraelCurrency> currencies = elements.stream().map(this::toCurrency).collect(Collectors.toList());
+//
+//        israelCurrencyRepository.saveAll(currencies);
+
+//        page.getElementsByTag("CURRENCY").get(0).childNodes.get(1).childNode(0)
+//        Node y = elements.get(0).childNode(1);
+//        System.err.println(y);
+//        String z = elements.get(0).select("NAME").get(0).childNode(0).toString();
+//        System.err.println(z + " rez");
+//        String xu = "0";
+//        Elements x = page.select("Name");
+//        System.out.println(x.eachText());
+//        Elements y = page.select("Value");
+//        System.out.println(y.eachText());
+
+//        page.getElementsByTag("CURRENCY")
+//    }
+//
+//    private IsraelCurrency toCurrency(Element el) {
+//        String name = el.select("NAME").get(0).childNode(0).toString();
+//        String co = el.select("COUNTRY").get(0).childNode(0).toString();
+//        String a = el.select("CURRENCYCODE").get(0).childNode(0).toString();
+//        Double ctoString = Double.valueOf(el.select("CHANGE").get(0).childNode(0).toString());
+//        Double r = Double.valueOf(el.select("RATE").get(0).childNode(0).toString());
+//        Double q = Double.valueOf(el.select("UNIT").get(0).childNode(0).toString());
+//
+//
+//
+//       IsraelCurrency israelCurrency = IsraelCurrency.builder()
+//               .name(name)
+//               .country(co)
+//               .abbr(a)
+//               .changeCourse(ctoString)
+//               .rate(r)
+//               .quantity(q)
+//               .build();
+//        return israelCurrency;
+//    }
 }
 
 
