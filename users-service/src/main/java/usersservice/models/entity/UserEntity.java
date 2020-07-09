@@ -1,5 +1,6 @@
 package usersservice.models.entity;
 
+import usersservice.enums.Country;
 import usersservice.enums.InterfaceLang;
 
 import java.io.Serializable;
@@ -40,6 +41,9 @@ public class UserEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InterfaceLang lang;
+
+    @Enumerated(EnumType.STRING)
+    private Country myCountry = Country.ISRAEL;
 
 
     public void setLang(InterfaceLang lang) {
