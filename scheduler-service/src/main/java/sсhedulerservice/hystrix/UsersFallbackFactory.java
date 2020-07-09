@@ -1,4 +1,4 @@
-package shedulerservice.hystrix;
+package sсhedulerservice.hystrix;
 
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;

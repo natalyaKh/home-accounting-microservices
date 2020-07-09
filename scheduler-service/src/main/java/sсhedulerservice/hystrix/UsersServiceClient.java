@@ -1,4 +1,4 @@
-package shedulerservice.hystrix;
+package sсhedulerservice.hystrix;
 
 import feign.FeignException;
 import feign.Headers;

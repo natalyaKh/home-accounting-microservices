@@ -19,6 +19,7 @@ docker run -d -p 9411:9411 openzipkin/zipkin
 5. user-service
 6. bills-service
 7. currency-service
+8. scheduler-service
 
 
 for login

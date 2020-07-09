@@ -1,4 +1,4 @@
-package shedulerservice;
+package sсhedulerservice;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
