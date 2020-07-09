@@ -3,12 +3,14 @@ package currencyservice.service;
 
 import currencyservice.model.IsraelCurrency;
 import currencyservice.repo.IsraelCurrencyRepository;
+import currencyservice.service.hystrix.SendMail;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import org.jsoup.nodes.Document;
@@ -29,9 +31,11 @@ public class ParseIsraelCurrencyService {
     @Value("${israel.currency.xml}")
     private String link;
 
-
     @Autowired
     IsraelCurrencyRepository israelCurrencyRepository;
+
+    @Autowired
+    SendMail sendMail;
 
     public void parseIsraBankXml() throws IOException {
 
@@ -45,6 +49,9 @@ public class ParseIsraelCurrencyService {
 
         israelCurrencyRepository.saveAll(currencies);
         LOGGER.info("data with israel currency parsed {} from link {} ", LocalDate.now(), link);
+
+        sendMail.parseIsraBank();
+        LOGGER.info("e-mail from israel parser send " + new Date());
 
     }
 

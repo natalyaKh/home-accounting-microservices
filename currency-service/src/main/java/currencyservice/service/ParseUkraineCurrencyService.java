@@ -2,6 +2,7 @@ package currencyservice.service;
 
 import currencyservice.model.UkraineCurrency;
 import currencyservice.repo.UkraineCurrencyRepository;
+import currencyservice.service.hystrix.SendMail;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
@@ -26,6 +28,9 @@ public class ParseUkraineCurrencyService {
 
     @Autowired
     UkraineCurrencyRepository ukraineCurrencyRepository;
+
+    @Autowired
+    SendMail sendMail;
 
     public void parseUkrBankXml() throws IOException {
 
@@ -40,6 +45,8 @@ public class ParseUkraineCurrencyService {
         ukraineCurrencyRepository.saveAll(currencies);
         LOGGER.info("data with ukrainian currency parsed {} from link {} ", LocalDate.now(), link);
 
+        sendMail.parseIsraBank();
+        LOGGER.info("e-mail from israel parser send " + new Date());
     }
 
     private UkraineCurrency toCurrency(Element el) {

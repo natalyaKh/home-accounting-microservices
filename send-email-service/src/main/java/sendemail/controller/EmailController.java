@@ -127,6 +127,47 @@ public class EmailController {
         return "Email send!";
     }
 
+    @PostMapping("/parse/israell")
+    String sendCParseIsrBank() throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+
+        String ADMIN_EMAIL = env.getProperty("admin.email.address");
+
+        boolean multipart = true;
+        MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
+//        The HTML body for the email.
+        final String htmlMsg =
+                "Hi, admin ! "
+                        + "Currency from Israel Bank added to dataBase";
+
+        message.setContent(htmlMsg, "text/html");
+
+        helper.setTo(ADMIN_EMAIL);
+        helper.setSubject("Parse Israel Bank " + APPLICATION_NAME);
+        this.emailSender.send(message);
+        return "Email send!";
+    }
+
+    @PostMapping("/parse/ukraine")
+    String sendCParseUkrBank() throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+
+        String ADMIN_EMAIL = env.getProperty("admin.email.address");
+
+        boolean multipart = true;
+        MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
+//        The HTML body for the email.
+        final String htmlMsg =
+                "Hi, admin ! "
+                        + "Currency from Ukrainian Bank added to dataBase";
+
+        message.setContent(htmlMsg, "text/html");
+
+        helper.setTo(ADMIN_EMAIL);
+        helper.setSubject("Parse Ukr Bank " + APPLICATION_NAME);
+        this.emailSender.send(message);
+        return "Email send!";
+    }
 
 }
 

@@ -6,6 +6,7 @@ public enum ErrorMessages {
     CURRENCY_ALREADY_EXISTS("Currency already exists. Name of currency: "),
     CURRENCY_NOT_FOUND("currency not found. ABBR of currency: ");
 
+
     private String errorMessage;
 
     ErrorMessages(String errorMessage) {
