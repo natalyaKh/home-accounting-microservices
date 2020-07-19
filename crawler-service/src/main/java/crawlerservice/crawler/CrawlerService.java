@@ -34,19 +34,13 @@ public class CrawlerService {
                 String name = list.findElement(By.xpath("//body//div[@id='checkout-main']//div//div//div//div[1]//div[2]//div[" + i + "]//div//div[@class='product-title']")).getText();
                 String price = list.findElement(By.xpath("//body//div[@id='checkout-main']//div//div//div//div[1]//div[2]//div[" + i + "]//div//div[@class='position-relative text-left']//span//span" +
                         "")).getText();
+
                 String[] summ = price.split(" ");
                 String[] sumraz = summ[0].split("\\.");
-                Integer rub = Integer.valueOf(sumraz[0]);
-                Integer cop = Integer.valueOf(sumraz[1]);
-                Rezult rez = new Rezult();
-                Price pr = new Price();
 
-                pr.setRub(rub);
-                pr.setCop(cop);
-                pr.setVal(summ[1]);
+                Price pr = getPrice(summ[1], sumraz);
+                Rezult rez = getRezult(name, pr);
 
-                rez.setProductName(name);
-                rez.setPrice(pr);
 
                 System.out.println("name " + rez.getProductName() + " " +
                         "rub: " + rez.getPrice().getRub() +
@@ -58,6 +52,21 @@ public class CrawlerService {
         LocalDate finish = LocalDate.now();
         Duration duration = Duration.between(start, finish);
         System.out.println(duration);
+    }
+
+    private Rezult getRezult(String name, Price pr) {
+        return Rezult.builder()
+                            .price(pr)
+                            .productName(name)
+                            .build();
+    }
+
+    private Price getPrice(String val, String[] sumraz) {
+        return Price.builder()
+                            .rub(Integer.valueOf(sumraz[0]))
+                            .cop(Integer.valueOf(sumraz[1]))
+                            .val(val)
+                            .build();
     }
 
     private WebDriver getWebDriver() {
