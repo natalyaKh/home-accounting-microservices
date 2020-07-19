@@ -1,0 +1,30 @@
+crawler:
+  clients:
+    hostname: localhost
+    scheme: http
+    httpPort: 9200
+    containerPort: 9200
+  elastic:
+    imageUrl: docker.elastic.co/elasticsearch/elasticsearch
+    version: 7.7.0
+  index:
+    name: products
+    shard: 2
+    replica: 1
+    from: 0
+    size: 5
+    timeout: 60
+
+server:
+  port: 8084
+spring:
+  application:
+    name: crawler-service
+
+url:
+  rami:
+    levi: https://www.rami-levy.co.il/he/shop/%D7%A4%D7%99%D7%A8%D7%95%D7%AA_%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA
+
+
+
+

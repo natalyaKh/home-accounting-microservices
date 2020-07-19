@@ -1,17 +1,21 @@
 package crawlerservice.crawler;
 
+import crawlerservice.dao.QueryDAO;
 import crawlerservice.model.Price;
+import crawlerservice.model.Product;
 import crawlerservice.model.Rezult;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CrawlerService {
@@ -19,7 +23,10 @@ public class CrawlerService {
     @Value("${url.rami.levi}")
     private String ramiLeviUrl;
 
-    public void parseRamiLevi(){
+    @Autowired
+    QueryDAO productServer;
+
+    public void parseRamiLevi() {
         LocalDate start = LocalDate.now();
         WebDriver driver = getWebDriver();
         driver.get(ramiLeviUrl);
@@ -37,14 +44,23 @@ public class CrawlerService {
 
                 String[] summ = price.split(" ");
                 String[] sumraz = summ[0].split("\\.");
-
                 Price pr = getPrice(summ[1], sumraz);
-                Rezult rez = getRezult(name, pr);
+                Product product = Product.builder()
+                        .id(UUID.randomUUID().toString())
+                        .title(name)
+                        .category("eat")
+                        .subcategory("good eat")
+                        .rub(pr.getRub())
+                        .cop(pr.getCop())
+                        .build();
 
+                productServer.indexRequest(product);
+//                Rezult rez = getRezult(name, pr);
 
-                System.out.println("name " + rez.getProductName() + " " +
-                        "rub: " + rez.getPrice().getRub() +
-                        " cop: " + rez.getPrice().getCop());
+//
+//                System.out.println("name " + rez.getProductName() + " " +
+//                        "rub: " + rez.getPrice().getRub() +
+//                        " cop: " + rez.getPrice().getCop());
             }
             driverLink.quit();
         }
@@ -56,24 +72,23 @@ public class CrawlerService {
 
     private Rezult getRezult(String name, Price pr) {
         return Rezult.builder()
-                            .price(pr)
-                            .productName(name)
-                            .build();
+                .price(pr)
+                .productName(name)
+                .build();
     }
 
     private Price getPrice(String val, String[] sumraz) {
         return Price.builder()
-                            .rub(Integer.valueOf(sumraz[0]))
-                            .cop(Integer.valueOf(sumraz[1]))
-                            .val(val)
-                            .build();
+                .rub(Integer.valueOf(sumraz[0]))
+                .cop(Integer.valueOf(sumraz[1]))
+                .val(val)
+                .build();
     }
 
     private WebDriver getWebDriver() {
         WebDriver driver = new FirefoxDriver();
         return driver;
     }
-
 
 
 }
