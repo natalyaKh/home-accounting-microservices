@@ -1,17 +1,24 @@
 # home-acc-beta-2
 
 файлы с документацией 
-files with documentation->
+files with documentation
+#
+->
+#
 ru_home-acc-beta-2_description
+#
 en_home-acc-beta-2_description
+#
 https://documenter.getpostman.com/view/5121731/SzzoaFg1?version=latest
-
+#
+#
 полезня статья про актуатор
 https://habr.com/ru/company/otus/blog/452624/
-
+#
 start:
+#
 запуск:
-
+#
 1. docker : 
     - rabbit mq
 docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
